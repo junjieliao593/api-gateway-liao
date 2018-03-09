@@ -13,3 +13,8 @@ zuul.routes.api-b.serviceId=service-B
 #zuul.routes.api-a-url.url=http://localhost:2222/
 
 eureka.client.serviceUrl.defaultZone=http://localhost:1111/eureka/
+
+#远程配置中心
+#cloud.config.uri: http://localhost:1201/
+#cloud.config.profile: default
+#cloud.config.label: master
