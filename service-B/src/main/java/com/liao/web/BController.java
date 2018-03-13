@@ -24,5 +24,11 @@ public class BController {
         logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + r);
         return "From Service-B, Result is " + r;
     }
+    @RequestMapping(value = "/test" ,method = RequestMethod.GET)
+    public String test(@RequestParam String param) {
+        ServiceInstance instance = client.getLocalServiceInstance();
+        logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + param);
+        return "From Service-B, Param is " + param;
+    }
 
 }

@@ -1,12 +1,12 @@
 spring:
   application:
-    name: config-server
+    name: config-server-git
   cloud:
     config:
       server:
         git:
           uri: https://github.com/junjieliao593/myconfig/
-#          search-paths: repo
+#           search-paths: config-repo
 #          username:
 #          password:
 
