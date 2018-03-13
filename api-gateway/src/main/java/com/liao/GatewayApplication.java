@@ -1,5 +1,6 @@
 package com.liao;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.SpringCloudApplication;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import com.liao.filter.AccessFilter;
 
 @EnableZuulProxy
+//@SpringBootApplication
 @SpringCloudApplication
 public class GatewayApplication {
 
