@@ -1,3 +1,6 @@
+server:
+  port: 1201
+  
 spring:
   application:
     name: config-server-git
@@ -10,5 +13,26 @@ spring:
 #          username:
 #          password:
 
-server:
-  port: 1201
+#服务发现客户端
+eureka:
+  instance:
+    #向Eureka注册时，是否使用IP地址+端口号作为服务实例的唯一标识。推荐设置为true
+    prefer-ip-address: true
+
+  client:
+    #是否将自身的实例信息注册到Eureka服务端
+    register-with-eureka: true
+    #是否拉取并缓存其他服务注册表副本到本地
+    fetch-registry: true
+    #注册到哪个Eureka服务实例
+    service-url:
+      defaultZone: http://localhost:1111/eureka/
+
+spring:
+  profiles:dev
+#    active: native
+#  cloud:
+#    config:
+#      server:
+#        native:
+#          search-locations: classpath:config/,classpath:config/licenseservice

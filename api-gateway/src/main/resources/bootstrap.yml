@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active:
+      default
+  cloud:
+    config:
+      uri: http://localhost:1201
