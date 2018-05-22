@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liao.ms.bbs.dao.ArticleDao">
+
+	<!-- <cache /> -->
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+
+	<resultMap id="ArticleResultMap" type="com.liao.ms.bbs.entity.Article">
+		<!-- 自动生成 -->
+		<id property="id" column="ID" jdbcType="BIGINT" />
+		<result property="userId" column="USER_ID" jdbcType="BIGINT" />
+		<result property="plateName" column="PLATE_NAME" jdbcType="VARCHAR" />
+		<result property="articleName" column="ARTICLE_NAME" jdbcType="VARCHAR" />
+		<result property="postDate" column="POST_DATE" jdbcType="TIMESTAMP" />
+		<result property="postState" column="POST_STATE" jdbcType="VARCHAR" />
+		<result property="sort" column="SORT" jdbcType="INTEGER" />
+		<result property="top" column="TOP" jdbcType="VARCHAR" />
+		<result property="hits" column="HITS" jdbcType="INTEGER" />
+		<result property="content" column="CONTENT" jdbcType="LONGVARCHAR" />
+	<!-- 	<result property="revision" column="REVISION" jdbcType="INTEGER" />
+		<result property="createUserId" column="CREATE_USER_ID"
+			jdbcType="NUMERIC" />
+		<result property="lastUpdateUserId" column="LAST_UPDATE_USER_ID"
+			jdbcType="NUMERIC" />
+		<result property="createDate" column="CREATE_DATE" jdbcType="DATE" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE"
+			jdbcType="DATE" /> -->
+	</resultMap>
+
+	<!-- 根据userId查到该用户所以的文章 按照发表时间排序 -->
+	<select id="getCountByUserId" resultType="int">
+		SELECT
+		count(1)
+		FROM t_article T
+		<!-- <filter open="Where (" close=")" /> -->
+		ORDER BY POST_DATE
+	</select>
+
+	<select id="getByUserId" resultMap="ArticleResultMap">
+		SELECT
+		T.*
+		FROM t_article T
+		where T.USER_ID=#{userId} AND (
+		T.POST_STATE='1' OR T.POST_STATE='2'
+		)
+		ORDER BY POST_DATE DESC
+
+	</select>
+
+	<select id="getById" resultMap="ArticleResultMap">
+		SELECT
+		T.*
+		FROM t_article T
+		WHERE
+		T.ID = #{id}
+
+	</select>
+
+
+	<select id="getByIds" resultMap="ArticleResultMap">
+		SELECT
+		T.*
+		FROM t_article T
+		WHERE T.ID in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT
+		count(1)
+		FROM t_article T
+
+		<!-- <filter open="Where (" close=")" /> -->
+	</select>
+
+	<select id="selectAll" resultMap="ArticleResultMap">
+		SELECT
+		T.*
+		FROM t_article T
+
+		<!-- <filter open="Where (" close=")" /> -->
+	</select>
+
+	<select id="select"  resultMap="ArticleResultMap">
+		SELECT T.* FROM t_article T
+
+		<!-- <filter open="Where (" close=")" /> -->
+	</select>
+
+	<!-- 插入语句 -->
+	<sql id="base_insert_sql">
+		INSERT INTO t_article (
+		<if test="id != null">ID,</if>
+		USER_ID,PLATE_NAME,ARTICLE_NAME, POST_DATE,POST_STATE,SORT,
+		TOP,HITS,CONTENT, TENANT_ID,APP_NAME,APP_SCOPE,REVISION,
+		CREATE_USER_ID,LAST_UPDATE_USER_ID,CREATE_DATE,LAST_UPDATE_DATE )
+		VALUES (
+		<if test="id != null">#{id,jdbcType=NUMERIC},</if>
+		#{userId,jdbcType=BIGINT},#{plateName,jdbcType=VARCHAR},#{articleName,jdbcType=VARCHAR},
+		#{postDate,jdbcType=TIMESTAMP},#{postState,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},
+		#{top,jdbcType=VARCHAR},#{hits,jdbcType=INTEGER},#{content,jdbcType=LONGVARCHAR},
+		#{tenantId,jdbcType=VARCHAR},#{appName,jdbcType=VARCHAR},#{scope,jdbcType=VARCHAR},1,
+		#{currentUserId,jdbcType=NUMERIC},#{currentUserId,jdbcType=NUMERIC},#{_currentDate},#{_currentDate}
+		)
+	</sql>
+
+	<insert id="insert" parameterType="com.liao.ms.bbs.entity.Article"
+		useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+		<selectKey resultType="long" keyProperty="id" order="BEFORE"
+			databaseId="oracle">
+			SELECT t_S.nextval AS value FROM dual
+		</selectKey>
+
+		<include refid="base_insert_sql" />
+	</insert>
+
+	<update id="update" parameterType="com.liao.ms.bbs.entity.Article">
+		UPDATE t_article
+		<set>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="plateName!= null">
+				PLATE_NAME= #{plateName,jdbcType=BIGINT},
+			</if>
+			<if test="articleName != null">
+				ARTICLE_NAME = #{articleName,jdbcType=VARCHAR},
+			</if>
+			<if test="postDate != null">
+				POST_DATE = #{postDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="postState != null">
+				POST_STATE = #{postState,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				SORT = #{sort,jdbcType=INTEGER},
+			</if>
+			<if test="top != null">
+				TOP = #{top,jdbcType=VARCHAR},
+			</if>
+			<if test="hits != null">
+				HITS = #{hits,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				CONTENT = #{content,jdbcType=LONGVARCHAR},
+			</if>
+			REVISION = #{revisionNext,jdbcType=INTEGER},
+			LAST_UPDATE_USER_ID =
+			#{currentUserId,jdbcType=NUMERIC},
+			LAST_UPDATE_DATE = #{_currentDate},
+		</set>
+		WHERE ID = #{id,jdbcType=NUMERIC}
+
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM t_article
+		WHERE ID = #{id}
+
+	</delete>
+
+	<delete id="deleteByIds">
+		DELETE FROM t_article
+		WHERE ID in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+
+	</delete>
+
+	<!-- //////////////////////////////////////////////////////////// -->
+	<select id="editPSById">
+		UPDATE
+		t_article T
+		SET T.POST_STATE = #{postState}
+		WHERE T.ID = #{article_id}
+	</select>
+
+</mapper>
+
