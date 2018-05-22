@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  */
 @Controller
-@RequestMapping("bbs/article")
+@RequestMapping("test/article")
 // @Resource(code = 20001, model = "Smart2", desc = "Article Resource")
 public class ArticleResource extends BaseContextAwareResource {
 	@Autowired
