@@ -1,0 +1,16 @@
+info:
+  profile: default
+  from: git
+  
+test: ggg
+
+# routes to serviceId
+zuul:
+  routes:
+     api-a:
+        path:/api-a/**
+	serviceId:service-A
+
+     api-b:
+      	path:/api-b/**
+	serviceId:service-B
