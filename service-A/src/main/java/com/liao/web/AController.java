@@ -21,14 +21,14 @@ public class AController {
     public String add(@RequestParam Integer a, @RequestParam Integer b) {
         ServiceInstance instance = client.getLocalServiceInstance();
         Integer r = a + b;
-        logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + r);
+        logger.info("Service-A,/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + r);
         return "From Service-A, Result is " + r;
     }
     
     @RequestMapping(value = "/test" ,method = RequestMethod.GET)
-    public String test(@RequestParam String param) {
+    public String test(@RequestParam(required = false) String param) {
         ServiceInstance instance = client.getLocalServiceInstance();
-        logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + param);
+        logger.info("Service-A,/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + param);
         return "From Service-A, Param is " + param;
     }
 
